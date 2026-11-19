@@ -9,6 +9,7 @@ def call(String Project, String ImageTag, String dockerhubuser) {
 
         sh """
             echo "\$dockerHubPass" | docker login -u "\$dockerHubuser" --password-stdin
+            docker tag ${Project}:${ImageTag} ${dockerhubuser}/${Project}:${ImageTag}
             docker push ${dockerhubuser}/${Project}:${ImageTag}
         """
     }
