@@ -1,16 +1,19 @@
 
-def call(String Project, String ImageTag, String dockerhubuser) {
+def call(String credentialsId, String Project, String ImageTag) {
 
     withCredentials([usernamePassword(
-        credentialsId: 'dockerhubCred',
+        credentialsId: credentialsId,
         passwordVariable: 'dockerHubPass',
         usernameVariable: 'dockerHubuser'
     )]) {
 
         sh """
             echo "\$dockerHubPass" | docker login -u "\$dockerHubuser" --password-stdin
-            docker tag ${Project}:${ImageTag} ${dockerhubuser}/${Project}:${ImageTag}
-            docker push ${dockerhubuser}/${Project}:${ImageTag}
+
+            docker tag ${Project}:${ImageTag} \$dockerHubuser/${Project}:${ImageTag}
+
+            docker push \$dockerHubuser/${Project}:${ImageTag}
         """
     }
 }
+
